@@ -36,6 +36,7 @@ def update(client, bio, time_fmt):
         )
 
     except Exception as error:
+        client.send_message('me', f'TimeSelfBot \nError: {error}')
         print(error)
 
 
