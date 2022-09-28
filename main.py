@@ -26,13 +26,17 @@ def get_clock_emoji(now):
 
 
 def update(client, bio, time_fmt):
-    now = dt.datetime.now(TEHRAN_TZ)
-    clock = get_clock_emoji(now)
-    client(
-        UpdateProfileRequest(
-            about=bio + time_fmt.format(time=now.strftime('%H:%M'), clock=clock)
+    try:
+        now = dt.datetime.now(TEHRAN_TZ)
+        clock = get_clock_emoji(now)
+        client(
+            UpdateProfileRequest(
+                about=bio + time_fmt.format(time=now.strftime('%H:%M'), clock=clock)
+            )
         )
-    )
+
+    except Exception as error:
+        print(error)
 
 
 def pend(account):
