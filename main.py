@@ -4,12 +4,25 @@ from telethon.tl.functions.users import GetFullUserRequest
 
 import datetime as dt
 import schedule
+import json
 import time
 import pytz
 
-import meta
-
 TEHRAN_TZ = pytz.timezone('Asia/Tehran')
+clocks = {
+    0:  '🕛', 0.5:  '🕧',
+    1:  '🕐', 1.5:  '🕜',
+    2:  '🕑', 2.5:  '🕝',
+    3:  '🕒', 3.5:  '🕞',
+    4:  '🕓', 4.5:  '🕟',
+    5:  '🕔', 5.5:  '🕠',
+    6:  '🕕', 6.5:  '🕡',
+    7:  '🕖', 7.5:  '🕢',
+    8:  '🕗', 8.5:  '🕣',
+    9:  '🕘', 9.5:  '🕤',
+    10: '🕙', 10.5: '🕥',
+    11: '🕚', 11.5: '🕦'
+}
 
 
 def get_clock_emoji(now):
@@ -17,12 +30,12 @@ def get_clock_emoji(now):
     minute = now.minute
 
     if minute >= 53:
-        return meta.clocks[hour + 1]
+        return clocks[hour + 1]
 
     elif minute >= 23:
-        return meta.clocks[hour + .5]
+        return clocks[hour + .5]
 
-    return meta.clocks[hour]
+    return clocks[hour]
 
 
 def update(client, bio, time_fmt):
@@ -54,7 +67,10 @@ def pend(account):
 
 
 if __name__ == '__main__':
-    for user, info in meta.accounts.items():
+    with open('accounts.json') as file:
+        accounts = json.load(file)
+
+    for user, info in accounts.items():
         pend(info)
 
     while True:
