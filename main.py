@@ -45,7 +45,7 @@ def pend(account):
     client.send_message('me', 'TimeSelfBot started!')
 
     me = client(GetFullUserRequest('me'))
-    schedule.every().minute.do(lambda: update(client, me.about, '   Time: {time} {clock}'))
+    schedule.every().minute.do(lambda: update(client, me.full_user.about, '   Time: {time} {clock}'))
 
 
 
