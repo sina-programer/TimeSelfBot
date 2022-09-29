@@ -26,16 +26,16 @@ clocks = {
 
 
 def get_clock_emoji(now):
-    hour = now.hour % 12
     minute = now.minute
+    hour = now.hour
 
     if minute >= 53:
-        return clocks[hour + 1]
+        hour += 1
 
     elif minute >= 23:
-        return clocks[hour + .5]
+        hour += .5
 
-    return clocks[hour]
+    return clocks[hour % 12]
 
 
 def update(client, bio, time_fmt):
