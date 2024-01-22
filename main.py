@@ -23,8 +23,9 @@ def update(client, bio):
         )
 
     except Exception as error:
-        client.send_message('me', f'TimeSelfBot \nError: {error}')
-        print(error)
+        phrase = type(error).__name__ + ': ' + error
+        client.send_message('me', f'TimeSelfBot \n{phrase}')
+        print(phrase)
 
 
 def pend(account):
