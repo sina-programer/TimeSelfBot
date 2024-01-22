@@ -12,13 +12,13 @@ import pytz
 import clocks
 
 
-def update(client, bio, time_fmt):
+def update(client, bio):
     try:
         now = dt.datetime.now(TIMEZONE)
         clock = clocks.get_emoji(now)
         client(
             UpdateProfileRequest(
-                about=bio + time_fmt.format(time=now.strftime('%H:%M'), clock=clock)
+                about=bio + TIME_FORMAT.format(hour=now.hour, minute=now.minute, clock=clock)
             )
         )
 
@@ -37,13 +37,14 @@ def pend(account):
     client.send_message('me', 'TimeSelfBot started!')
 
     me = client(GetFullUserRequest('me'))
-    updater = partial(update, client, me.full_user.about, '   Time: {time} {clock}')
+    updater = partial(update, client, me.full_user.about)
     updater()
     schedule.every().minute.at(':00').do(updater)
 
 
 TIMEZONE_NAME = 'Asia/Tehran'
 TIMEZONE = pytz.timezone(TIMEZONE_NAME)
+TIME_FORMAT = "   Time: {hour}:{minute} {clock}"
 
 
 if __name__ == '__main__':
