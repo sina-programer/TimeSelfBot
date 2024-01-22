@@ -12,13 +12,23 @@ import pytz
 import clocks
 
 
+def rounded_time(datetime):
+    if datetime.hour == datetime.minute:
+        return True
+    return False
+
+
 def update(client, bio):
     try:
         now = dt.datetime.now(TIMEZONE)
         clock = clocks.get_emoji(now)
+        suffix = ''
+        if rounded_time(now):
+            suffix = '🔥'
+
         client(
             UpdateProfileRequest(
-                about=bio + TIME_FORMAT.format(hour=now.hour, minute=now.minute, clock=clock)
+                about=bio + TIME_FORMAT.format(hour=now.hour, minute=now.minute, clock=clock, suffix=suffix)
             )
         )
 
@@ -45,7 +55,7 @@ def pend(account):
 
 TIMEZONE_NAME = 'Asia/Tehran'
 TIMEZONE = pytz.timezone(TIMEZONE_NAME)
-TIME_FORMAT = "   Time: {hour}:{minute} {clock}"
+TIME_FORMAT = "  Time: {hour}:{minute} {clock} {suffix}"
 
 
 if __name__ == '__main__':
