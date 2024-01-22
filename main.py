@@ -49,11 +49,11 @@ TIME_FORMAT = "   Time: {hour}:{minute} {clock}"
 
 
 if __name__ == '__main__':
-    with open('accounts.json') as file:
-        accounts = json.load(file)
+    with open('accounts.json') as handler:
+        accounts = json.load(handler)
 
-    for name, info in accounts.items():
-        pend(info)
+    for account in accounts:
+        pend(account)
 
     while True:
         schedule.run_pending()

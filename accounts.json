@@ -1,8 +1,8 @@
-{
-    "Account-Name": {
+[
+    {
 		"phone": "+989876543210",
 		"api-id": 9876543210,
 		"api-hash": "api-hash",
 		"session": "session-name"
 	}
-}
+]
