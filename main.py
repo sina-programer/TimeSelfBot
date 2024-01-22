@@ -9,40 +9,13 @@ import json
 import time
 import pytz
 
-
-clocks = {
-    0:  '🕛', 0.5:  '🕧',
-    1:  '🕐', 1.5:  '🕜',
-    2:  '🕑', 2.5:  '🕝',
-    3:  '🕒', 3.5:  '🕞',
-    4:  '🕓', 4.5:  '🕟',
-    5:  '🕔', 5.5:  '🕠',
-    6:  '🕕', 6.5:  '🕡',
-    7:  '🕖', 7.5:  '🕢',
-    8:  '🕗', 8.5:  '🕣',
-    9:  '🕘', 9.5:  '🕤',
-    10: '🕙', 10.5: '🕥',
-    11: '🕚', 11.5: '🕦'
-}
-
-
-def get_clock_emoji(now):
-    minute = now.minute
-    hour = now.hour
-
-    if minute >= 52:
-        hour += 1
-
-    elif minute >= 22:
-        hour += .5
-
-    return clocks[hour % 12]
+import clocks
 
 
 def update(client, bio, time_fmt):
     try:
         now = dt.datetime.now(TIMEZONE)
-        clock = get_clock_emoji(now)
+        clock = clocks.get_emoji(now)
         client(
             UpdateProfileRequest(
                 about=bio + time_fmt.format(time=now.strftime('%H:%M'), clock=clock)
