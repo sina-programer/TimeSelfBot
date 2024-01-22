@@ -1,8 +1,8 @@
 {
-    "Account-name": {
-		"phone_number": "+989876543210",
-		"api_id": 9876543210,
-		"api_hash": "api_hash",
-		"session_name": "session"
+    "Account-Name": {
+		"phone": "+989876543210",
+		"api-id": 9876543210,
+		"api-hash": "api-hash",
+		"session": "session-name"
 	}
 }
