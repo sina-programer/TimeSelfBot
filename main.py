@@ -2,13 +2,14 @@ from telethon import TelegramClient, events, sync
 from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
+from functools import partial
 import datetime as dt
 import schedule
 import json
 import time
 import pytz
 
-TEHRAN_TZ = pytz.timezone('Asia/Tehran')
+
 clocks = {
     0:  '🕛', 0.5:  '🕧',
     1:  '🕐', 1.5:  '🕜',
@@ -29,10 +30,10 @@ def get_clock_emoji(now):
     minute = now.minute
     hour = now.hour
 
-    if minute >= 53:
+    if minute >= 52:
         hour += 1
 
-    elif minute >= 23:
+    elif minute >= 22:
         hour += .5
 
     return clocks[hour % 12]
@@ -40,7 +41,7 @@ def get_clock_emoji(now):
 
 def update(client, bio, time_fmt):
     try:
-        now = dt.datetime.now(TEHRAN_TZ)
+        now = dt.datetime.now(TIMEZONE)
         clock = get_clock_emoji(now)
         client(
             UpdateProfileRequest(
@@ -55,24 +56,28 @@ def update(client, bio, time_fmt):
 
 def pend(account):
     client = TelegramClient(
-        api_id=account['api_id'],
-        api_hash=account['api_hash'],
-        session=account['session_name']
+        api_id=account['api-id'],
+        api_hash=account['api-hash'],
+        session=account['session']
     )
     client.start()
     client.send_message('me', 'TimeSelfBot started!')
 
     me = client(GetFullUserRequest('me'))
-    updater = lambda: update(client, me.full_user.about, '   Time: {time} {clock}')
-    schedule.every().minute.at(':00').do(updater)
+    updater = partial(update, client, me.full_user.about, '   Time: {time} {clock}')
     updater()
+    schedule.every().minute.at(':00').do(updater)
+
+
+TIMEZONE_NAME = 'Asia/Tehran'
+TIMEZONE = pytz.timezone(TIMEZONE_NAME)
 
 
 if __name__ == '__main__':
     with open('accounts.json') as file:
         accounts = json.load(file)
 
-    for user, info in accounts.items():
+    for name, info in accounts.items():
         pend(info)
 
     while True:
