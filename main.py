@@ -3,6 +3,7 @@ from telethon.tl.functions.account import UpdateProfileRequest
 from telethon.tl.functions.users import GetFullUserRequest
 
 from functools import partial
+from string import Template
 import datetime as dt
 import schedule
 import json
@@ -28,7 +29,7 @@ def update(client, bio):
 
         client(
             UpdateProfileRequest(
-                about=bio + TIME_FORMAT.format(hour=now.hour, minute=now.minute, clock=clock, suffix=suffix)
+                about=bio + TEMPLATE.substitute(hour=now.hour, minute=now.minute, clock=clock, suffix=suffix)
             )
         )
 
@@ -55,7 +56,7 @@ def pend(account):
 
 TIMEZONE_NAME = 'Asia/Tehran'
 TIMEZONE = pytz.timezone(TIMEZONE_NAME)
-TIME_FORMAT = "  Time: {hour}:{minute} {clock} {suffix}"
+TEMPLATE = Template("  Time: $hour:$minute $clock $suffix")
 
 
 if __name__ == '__main__':
