@@ -23,27 +23,28 @@ def update(client, bio):
     try:
         now = dt.datetime.now(TIMEZONE)
         clock = clocks.get_emoji(now)
-        suffix = ''
-        if rounded_time(now):
-            suffix = '🔥'
-
         client(
             UpdateProfileRequest(
-                about=bio + TEMPLATE.substitute(hour=now.hour, minute=now.minute, clock=clock, suffix=suffix)
+                about=bio + TEMPLATE.substitute(
+                    hour=now.hour,
+                    minute=now.minute,
+                    clock=clock,
+                    suffix='🔥' if rounded_time(now) else ''
+                )
             )
         )
 
     except Exception as error:
-        phrase = type(error).__name__ + ': ' + error
+        phrase = type(error).__name__ + ': ' + str(error)
         client.send_message('me', f'TimeSelfBot \n{phrase}')
         print(phrase)
 
 
-def pend(account):
+def pend(info):
     client = TelegramClient(
-        api_id=account['api-id'],
-        api_hash=account['api-hash'],
-        session=account['session']
+        api_id=info['api-id'],
+        api_hash=info['api-hash'],
+        session=info['session']
     )
     client.start()
     client.send_message('me', 'TimeSelfBot started!')
